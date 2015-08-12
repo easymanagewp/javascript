@@ -73,7 +73,12 @@ define('http',function(){
 			Post : function(url){return new Post(url);},
 			Put : function(url){return new Put(url);},
 			Delete : function(url){return new Delete(url);},
-			Patch : function(url){return new Patch(url);}
+			Patch : function(url){return new Patch(url);},
+			ValidateResp : {
+				success : function(resp){
+					return resp.status == 0 ;
+				}
+			}
 	};
 	
 	return Http;
