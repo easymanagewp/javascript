@@ -2,7 +2,10 @@ define('http',function(){
 	
 	var	Ajax = function(url){
 		this._url = url;
-		this._params = {};
+		this._params = {
+			/* Ajax 不进行数据缓存 */
+			_TIMESTAMP_  : new Date().getTime()
+		};
 		this._success = function(){};
 		this._error = function(){};
 		this._method = 'GET';
@@ -52,28 +55,12 @@ define('http',function(){
 		return this;
 	}
 	
-	
-	var Get = function(url){this._url = url;};
-	Get.prototype = new Ajax().method('GET');
-	
-	var Post = function(url){this._url = url;}
-	Post.prototype = new Ajax().method('POST');
-	
-	var Put = function(url){this._url = url;}
-	Put.prototype = new Ajax().method('POST').params('_method','put');
-	
-	var Delete = function(url){this._url = url;}
-	Delete.prototype = new Ajax().method('POST').params('_method','delete');
-	
-	var Patch = function(url){this._url = url;};
-	Patch.prototype = new Ajax().method('PATCH').params('_method','patch');
-	
 	var Http = {
-			Get : function(url){return new Get(url);},
-			Post : function(url){return new Post(url);},
-			Put : function(url){return new Put(url);},
-			Delete : function(url){return new Delete(url);},
-			Patch : function(url){return new Patch(url);},
+			Get : function(url){return new Ajax(url).method('GET');},
+			Post : function(url){return new Ajax(url).method('POST');},
+			Put : function(url){return new Ajax(url).method('POST').params('_method','put');},
+			Delete : function(url){return new new Ajax(url).method('POST').params('_method','delete');},
+			Patch : function(url){return new new Ajax(url).method('POST').params('_method','patch');},
 			ValidateResp : {
 				success : function(resp){
 					return resp.status == 0 ;
