@@ -1,41 +1,37 @@
 /**
- * Created by ÍõÅô on 2015/8/12.
- * LoginAcion ¶ÔLogin·½·¨½øĞĞ·â×°Óë½âÎö
+ * Created by ?? on 2015/8/12.
+ * LoginAcion ??ogin??????????????
  */
-define(function(){
+define(['jquery','utils','http','md5'],function($,utils,http,md5){
     var defaultOptions = {
-        url : "",                                                               /* µÇÂ¼Êı¾İÌá½»µØÖ· */
-        md5 : true,                                                             /* ÊÇ·ñ¶ÔÃÜÂë½øĞĞMD5¼ÓÃÜ */
-        loginNameKey : "loginName",                                         /* ÓÃ»§ÃûµÄÌá½»²ÎÊıÃû³Æ */
-        passwordKey : "password",                                           /* µÇÂ¼ÃÜÂëµÄÌá½»²ÎÊıÃû³Æ */
-        validateCodeKey : "code",                                           /* ÑéÖ¤ÂëµÄÌá½»²ÎÊıÃû³Æ */
-        loginNameElement : ":input[name='"+this.loginNameKey+"']",      /* ÓÃ»§ÃûÒ³ÃæÔªËØ */
-        passwordElement : ":input[type='password']",                            /* ÓÃ»§ÃÜÂëÒ³ÃæÔªËØ */
-        validateCodeElement : ":input[name='"+this.validateCodeKey+"']",    /* ÑéÖ¤ÂëÔªËØ */
-        successUrl : "",                                                             /* µÇÂ¼³É¹¦Ìø×ªÂ·¾¶ */
-        hint : function(msg,element){                                               /* ´íÎóÌáÊ¾ */
-            require(['requirejs-utils'],function(utils){
-                utils.alert(msg);
-                element.focus();
-            })
+        url : "",                                                               /* ç™»å½•åœ°å€ */
+        md5 : true,                                                             /* æ˜¯å¦å¯¹å¯†ç è¿›è¡Œmd5åŠ å¯†*/
+        loginNameKey : "loginName",                                         /* ç”¨æˆ·åæäº¤çš„key*/
+        passwordKey : "password",                                           /* å¯†ç æäº¤key*/
+        validateCodeKey : "code",                                           /* éªŒè¯ç æäº¤key*/
+        passwordElement : ":input[type='password']",                            /* å¯†ç å…ƒç´  */
+        successUrl : "",                                                             /* ç™»å½•æˆåŠŸè·³è½¬url */
+        hint : function(msg,element){                                               /* ä¿¡æ¯æç¤ºæ–¹å¼ */
+            utils.alert(msg);
+            element.focus();
         }
     };
 
-    var Login = function(){}
+    var Login = function(options){}
 
     /**
-     * ³õÊ¼»¯Login¶ÔÏóĞÅÏ¢
+     * ??Ê¼??Login?????
      * @param options
-     * ÒÔÏÂÎª²ÎÊıĞÅÏ¢£¬²ÎÊıÃûºóµÄÖµÎªÄ¬ÈÏÖµ
-     *  url : "",                                                                µÇÂ¼Êı¾İÌá½»µØÖ·
-     * md5 : true,                                                              ÊÇ·ñ¶ÔÃÜÂë½øĞĞMD5¼ÓÃÜ
-     * loginNameKey : "loginName",                                              ÓÃ»§ÃûµÄÌá½»²ÎÊıÃû³Æ
-     * passwordKey : "password",                                                µÇÂ¼ÃÜÂëµÄÌá½»²ÎÊıÃû³Æ
-     *  validateCodeKey : "code",                                               ÑéÖ¤ÂëµÄÌá½»²ÎÊıÃû³Æ
-     * loginNameElement : ":input[name='"+this.loginNameKey+"']",               ÓÃ»§ÃûÒ³ÃæÔªËØ
-     * passwordElement : ":input[type='password']",                            ÓÃ»§ÃÜÂëÒ³ÃæÔªËØ
-     * validateCodeElement : ":input[name='"+this.validateCodeKey+"']",         ÑéÖ¤ÂëÔªËØ
-     * hint : function(nsg,element){                                            ´íÎóĞÅÏ¢ÌáÊ¾
+     * ??Îª????Ï¢????????ÖµÎªÄ¬?Öµ
+     *  url : "",                                                                ??????á½»???
+     * md5 : true,                                                              ????????MD5???
+     * loginNameKey : "loginName",                                              ??????á½»??????
+     * passwordKey : "password",                                                ???????á½»??????
+     *  validateCodeKey : "code",                                               ?Ö¤???á½»??????
+     * loginNameElement : ":input[name='"+this.loginNameKey+"']",               ????Ò³?Ôª?
+     * passwordElement : ":input[type='password']",                            ?????Ò³?Ôª?
+     * validateCodeElement : ":input[name='"+this.validateCodeKey+"']",         ?Ö¤?Ôª?
+     * hint : function(nsg,element){                                            ??????Ê¾
      *     require(['utils'],function(utils){
      *       utils.alert(msg);
      *       element.focus()
@@ -43,106 +39,110 @@ define(function(){
     *   }
      */
     Login.prototype.init = function(options){
-        this._options = $.extend({}.defaultOptions,options);
+      var _login = this;
+        this._options = $.extend({},defaultOptions,options);
+        $('form').on('submit',function(){
+          _login.action();
+          return false;
+        })
     }
 
     /**
-     * »ñÈ¡ÓÃ»§Ãû
-     * @returns ÓÃ»§ÌîĞ´µÄÓÃ»§ÃûÊı¾İ
+     * ???????
+     * @returns ????Ğ´??Ã»?????
      */
     Login.prototype.getLoginName = function(){
         return this.getLoginNameElement().val();
     }
 
     /**
-     * »ñÈ¡ÓÃ»§ÃûÔªËØ
-     * @returns ÓÃ»§ÃûÔªËØ
+     * ???????Ôª?
+     * @returns ????Ôª?
      */
     Login.prototype.getLoginNameElement = function(){
-        return $(this._options.loginNameElement);
+        return $(":input[name='"+this._options.loginNameKey+"']");
     }
 
     /**
-     * »ñÈ¡ÊäÈëµÄÓÃ»§ÃÜÂë
-     * @returns ÓÃ»§ÌîĞ´µÄÃÜÂë
+     * ???????Ã»???
+     * @returns ????Ğ´????
      */
     Login.prototype.getPassword = function(){
         return this.getPasswordElement().val();
     }
 
     /**
-     * »ñÈ¡ÓÃ»§ÃÜÂëHtmlÔªËØ
-     * @returns ÓÃ»§ÃÜÂëHtmlÔªËØ
+     * ????????HtmlÔª?
+     * @returns ?????HtmlÔª?
      */
     Login.prototype.getPasswordElement = function(){
         return $(this._options.passwordElement);
     }
 
+
+
     /**
-     * »ñÈ¡ÓÃ»§ÊäÈëµÄÑéÖ¤Âë
-     * @returns ÓÃ»§ÌîĞ´µÄÑéÖ¤Âë
+     * ?????????????
+     * @returns ????Ğ´?????
      */
     Login.prototype.getValidateCode = function(){
         return this.getValidateCodeElement().val();
     }
 
     /**
-     * »ñÈ¡ÓÃ»§ÑéÖ¤ÂëhtmlÔªËØ
-     * @returns ÓÃ»§ÑéÖ¤ÂëhtmlÔªËØ
+     * ???????Ö¤?htmlÔª?
+     * @returns ????Ö¤?htmlÔª?
      */
     Login.prototype.getValidateCodeElement = function(){
-        return $(this._options.validateCodeElement);
+        return $(":input[name='"+this._options.validateCodeKey+"']");
     }
 
     /**
-     * Ö´ĞĞµÇÂ¼²Ù×÷
+     * Ö´???????
      */
     Login.prototype.action = function(){
-       require(['http','md5','requirejs-utils'],function(http,md5,utils){
+       /*
+       ???????Ï¢
+        */
+       var params = {};
+       params[this._options.loginNameKey] = this.getLoginName();
+       params[this._options.validateCodeKey] = this.getValidateCode();
+       if(this._options.md5 && utils.strNotBlankOrNull(this.getPassword())){
+           params[this._options.passwordKey] = md5(this.getPassword());
+       }else{
+           params[this._options.passwordKey] = this.getPassword();
+       }
 
-           /*
-           »ñÈ¡²ÎÊıĞÅÏ¢
-            */
-           var params = {};
-           params[this._options.loginNameKey] = this.getLoginName();
-           params[this._options.validateCodeKey] = this.getValidateCode();
-           if(this._options.md5){
-               params[this._options.passwordKey] = md5(this.getPassword());
-           }else{
-               params[this._options.passwordKey] = this.getPassword();
-           }
+       /*
+       ?Ö¤????Ï¢
+        */
+       if(utils.strIsBlankOrNull(params[this._options.loginNameKey])){
+           this._options.hint("ç”¨æˆ·åä¸èƒ½ä¸ºç©º",this.getLoginNameElement());
+           return false;
+       }
 
-           /*
-           ÑéÖ¤²ÎÊıĞÅÏ¢
-            */
-           if(utils.strIsBlankOrNull(params[this._options.loginNameKey])){
-               this._options.hint("ÓÃ»§Ãû²»ÄÜÎª¿Õ£¬ÇëÌîĞ´ÓÃ»§Ãû",this.getLoginNameElement());
-               return false;
-           }
+       if(utils.strIsBlankOrNull(params[this._options.passwordKey])){
+           this._options.hint("ç™»å½•å¯†ç ä¸èƒ½ä¸ºç©º",this.getPasswordElement());
+           return false;
+       }
 
-           if(utils.strIsBlankOrNull(params[this._options.passwordKey])){
-               this._options.hint("ÓÃ»§ÃÜÂë²»ÔÊĞíÎª¿Õ£¬ÇëÌîĞ´ÓÃ»§ÃÜÂë",this.getPasswordElement());
-               return false;
-           }
+       if(utils.strIsBlankOrNull(params[this._options.validateCodeKey])){
+           this._options.hint("è¯·å¡«å†™éªŒè¯ç ",this.getValidateCodeElement());
+           return false;
+       }
 
-           if(utils.strIsBlankOrNull(params[this._options.validateCodeKey])){
-               this._options.hint("ÑéÖ¤Âë²»ÔÊĞíÎª¿Õ£¬ÇëÌîĞ´ÑéÖ¤Âë",this.getValidateCodeElement());
-               return false;
-           }
-
-           /*
-           Ö´ĞĞµÇÂ¼²Ù×÷
-            */
-           http.Post(this._options.url).params(params).success(function(resp){
-                if(http.ValidateResp.success(resp)){
-                    utils.changeUrl(this._options.successUrl);
-                }else{
-                    this._options.hint(resp.status,this.getLoginNameElement())
-                }
-           }).error(function(){
-                this._options.hint("ÇëÇó·şÎñÆ÷Ê§°Ü£¬Çë¼ì²éÍøÂçÊÇ·ñÁ¬½Ó£¬»òÕßÁªÏµ¿Í·ş½â¾öÎÊÌâ",this.getLoginNameElement());
-           }).go();
-       })
+       /*
+       Ö´???????
+        */
+       http.Post(this._options.url).params(params).success(function(resp){
+            if(http.ValidateResp.success(resp)){
+                utils.next(this._options.successUrl);
+            }else{
+                this._options.hint(resp.status,this.getLoginNameElement())
+            }
+       }).error(function(){
+            this._options.hint("??????Ê§?Ü£???????????Ó£?????Ïµ?Í·?????",this.getLoginNameElement());
+       }).go();
     }
 
     return new Login();

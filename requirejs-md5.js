@@ -1,4 +1,5 @@
- function md5(string){
+ define(function(){
+        function md5(string){
                 function md5_RotateLeft(lValue, iShiftBits) {
                         return (lValue<<iShiftBits) | (lValue>>>(32-iShiftBits));
                 }
@@ -179,5 +180,8 @@
                         c=md5_AddUnsigned(c,CC);
                         d=md5_AddUnsigned(d,DD);
                 }
-        return (md5_WordToHex(a)+md5_WordToHex(b)+md5_WordToHex(c)+md5_WordToHex(d)).toLowerCase();
-}
+                return (md5_WordToHex(a)+md5_WordToHex(b)+md5_WordToHex(c)+md5_WordToHex(d)).toLowerCase();
+        }
+
+        return md5;
+});

@@ -1,4 +1,4 @@
-(function($, undefined) {
+define(['jquery'],function($) {
 	/* ======================================== Base64 编码解码 ======================================== */
 	var keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 	function encode64(input)
@@ -169,6 +169,9 @@
 	    return temp;
 	}
 	/* ======================================== Base64 编码解码End ======================================== */
-	$.encode64 = encode64;
-	$.decode64 = decode64;
-})(window);
+
+	return {
+		encode : encode64,
+		decode : decode64
+	};	
+});

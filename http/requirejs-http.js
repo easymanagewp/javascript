@@ -1,4 +1,4 @@
-define('http',function(){
+define(['jquery'],function($){
 	
 	var	Ajax = function(url){
 		this._url = url;

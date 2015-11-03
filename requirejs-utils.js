@@ -2,9 +2,9 @@
  * Created by 王鹏 on 2015/8/12.
  * 工具类
  */
-define(function(){
+define(['jquery'],function($){
     return {
-        changeUrl : function(url){
+        next : function(url){
             window.location.href = url;
         },
         alert : function(msg){
@@ -14,7 +14,7 @@ define(function(){
             return (null != str && "" != str);
         },
         strIsBlankOrNull : function(str){
-            return this.strNotBlankOrNull(str);
+            return !this.strNotBlankOrNull(str);
         }
     };
 })
